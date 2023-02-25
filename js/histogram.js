@@ -56,8 +56,7 @@ function message(e) {
     summa += value;
     mean = summa / sims.length;
     repaint();
-  }
-  else {
+  } else {
     sims = sims.order();
     let l = sims.length;
     qs = [sims[Math.round(l/4)], sims[Math.round(l/2)], sims[Math.round(3*l/4)]];

@@ -23,6 +23,7 @@ let mean_line = svg.append("line").attr("stroke", "blue");
 let mean_text = svg.append("text").attr("text-anchor", "end").attr("font-family", "Arial").attr("font-size", "smaller").attr("fill", "blue");
 
 let stats = false;
+console.log("stats => " + stats);
 let qs, q_lines, q_texts;
 
 window.addEventListener("load", (e) => {

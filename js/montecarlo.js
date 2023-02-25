@@ -23,7 +23,7 @@ async function montecarlo_start() {
       let niter = parseInt(document.getElementById("niter").value);
       let nbins = parseInt(document.getElementById("nbins").value);
       confs_out.forEach((c,i) => {
-        win[i] = window.open("https://rebo16v.github.io/simulation.html?id=" + i + "&name=" + c[0] + "&nbins=" + nbins, "forecast_"+i);
+        win[i] = window.open("https://rebo16v.github.io/prophecy/simulation.html?id=" + i + "&name=" + c[0] + "&nbins=" + nbins, "forecast_"+i);
       });
       await new Promise(r => setTimeout(r, 1000));
       for (let k = 0; k < niter; k++) {

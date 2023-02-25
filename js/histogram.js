@@ -23,7 +23,6 @@ let mean_line = svg.append("line").attr("stroke", "blue");
 let mean_text = svg.append("text").attr("text-anchor", "end").attr("font-family", "Arial").attr("font-size", "smaller").attr("fill", "blue");
 
 let stats = false;
-console.log("stats => " + stats);
 let qs, q_lines, q_texts;
 
 window.addEventListener("load", (e) => {
@@ -40,8 +39,7 @@ window.addEventListener("load", (e) => {
 function message(e) {
   let json = JSON.parse(e.data);
   let iter = parseInt(json.iter);
-  console.log("iter => " + iter);
-  if (iter > 0) {
+  if (iter >= 0) {
     let value = parseFloat(json.value);
     iter_text.text("iter " + iter).attr("x", width-margin.right).attr("y", 2*margin.top);
     if (sims.length == 0) {
@@ -107,7 +105,6 @@ function repaint() {
 }
 
 function resize() {
-  console.log("resize => " + stats);
   width = window.innerWidth - margin.left;
   height = window.innerHeight - margin.top;
   svg.attr("width", width).attr("height", height);

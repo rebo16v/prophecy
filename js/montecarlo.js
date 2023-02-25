@@ -1,20 +1,15 @@
-// let out;
 let win;
-let running;
-let paused;
+let running = false;
+let paused = false;
 
 async function montecarlo_start() {
   await Excel.run(async(context) => {
     document.getElementById("play").disabled = true;
     document.getElementById("stop").disabled = false;
     document.getElementById("pause").disabled = false;
-    if (running) {
-      console.log("montecarlo_start");
-      paused = false;
-      return;
-    } else {
+    paused = false;
+    if (!running) {
       running = true;
-      paused = false;
       let app = context.workbook.application;
       var prophecy = context.workbook.worksheets.getItem("prophecy");
       range_in = prophecy.getRange("A" + 2 + ":G" + (1+randoms.length));
@@ -25,11 +20,9 @@ async function montecarlo_start() {
       let confs_in = range_in.values;
       let confs_out = range_out.values;
       win = [];
-      // out = [];
       let niter = parseInt(document.getElementById("niter").value);
       let nbins = parseInt(document.getElementById("nbins").value);
       confs_out.forEach((c,i) => {
-        // out[i] = [];
         win[i] = window.open("https://rebo16v.github.io/simulation.html?id=" + i + "&name=" + c[0] + "&nbins=" + nbins, "forecast_"+i);
       });
       await new Promise(r => setTimeout(r, 1000));
@@ -42,12 +35,14 @@ async function montecarlo_start() {
         let outputs = stepOut(confs_out, context);
         await context.sync();
         outputs.forEach((o,i) => {
-          let value = o.values[0][0]
-          // out[i].push(value);
-          let msg = JSON.stringify({iter: k, value: value});
+          let msg = JSON.stringify({iter: k, value: o.values[0][0];});
           win[i].postMessage(msg);
         });
       }
+      let msg = JSON.stringify({iter: -1});
+      outputs.forEach((o,i) => {
+        win[i].postMessage(msg);
+      });
       document.getElementById("play").disabled = false;
       document.getElementById("stop").disabled = true;
       document.getElementById("pause").disabled = true;

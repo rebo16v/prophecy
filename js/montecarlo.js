@@ -40,8 +40,8 @@ async function montecarlo_start() {
         });
       }
       let msg = JSON.stringify({iter: -1});
-      outputs.forEach((o,i) => {
-        win[i].postMessage(msg);
+      win.forEach(w => {
+        w.postMessage(msg);
       });
       document.getElementById("play").disabled = false;
       document.getElementById("stop").disabled = true;

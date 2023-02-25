@@ -35,7 +35,7 @@ async function montecarlo_start() {
         let outputs = stepOut(confs_out, context);
         await context.sync();
         outputs.forEach((o,i) => {
-          let msg = JSON.stringify({iter: k, value: o.values[0][0];});
+          let msg = JSON.stringify({iter: k, value: o.values[0][0]});
           win[i].postMessage(msg);
         });
       }

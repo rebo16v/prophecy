@@ -106,6 +106,7 @@ function repaint() {
 }
 
 function resize() {
+  console.log("resize => " + stats);
   width = window.innerWidth - margin.left;
   height = window.innerHeight - margin.top;
   svg.attr("width", width).attr("height", height);

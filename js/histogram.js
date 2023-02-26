@@ -42,6 +42,7 @@ function message(e) {
   console.log("iter => "+ iter);
   if (iter >= 0) {
     let value = parseFloat(json.value);
+    console.log("value => "+ value);
     iter_text.text("iter " + iter).attr("x", width-margin.right).attr("y", 2*margin.top);
     if (sims.length == 0) {
       x = d3.scaleLinear()

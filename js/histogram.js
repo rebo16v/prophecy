@@ -147,7 +147,10 @@ function mousemove(e) {
   if ((coord>margin.left) && (coord<(width-margin.right))) {
     const value = x.invert(coord);
     const idx = sims.findIndex(x => x>value);
-    const q = 100 * (idx / sims.length);
+    let q;
+    if (idx>0) {q = 100 * (idx / sims.length);}
+    else {q = 100;}
+
     m_text.text("Q=" + q + "%").attr("x", coord-2).attr("y", margin.top).attr("visibility", "visible");
     m_line.attr("x1", coord).attr("x2", coord).attr("y1", y(1)).attr("y2", y(0)).attr("visibility", "visible");
   } else {

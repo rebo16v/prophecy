@@ -59,16 +59,17 @@ function message(e) {
     let l = sims.length;
     qs = [sims[Math.round(l/4)], sims[Math.round(l/2)], sims[Math.round(3*l/4)]];
     q_texts = qs.map(q => x(q))
-    .forEach((q,i) => {
+      .map((q,i) => {
         svg.append("text")
         .attr("text-anchor", "end").attr("font-family", "Arial").attr("fill", "yellow")
         .text("Q" + (i+1))
         .attr("x", q-2).attr("y", (i+2)*margin.top);
       });
     q_lines = qs.map(q => x(q))
-    .forEach((q,i) => {
+    .map((q,i) => {
       svg.append("line")
-      .attr("stroke", "blue")
+      .attr("stroke", "yellow")
+      .attr("stroke-dasharray=", "4 1")
       .attr("x1", q).attr("x2", q).attr("y1", y(1)).attr("y2", y(0));
     });
     stats = true;

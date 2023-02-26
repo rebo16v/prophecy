@@ -146,6 +146,6 @@ function mousemove(e) {
   let coord = e.x;
   let value = x.invert(coord);
   console.log("mousemove: " + coord + " => " + value);
-  m_text.attr("text", value).attr("x", coord-2).attr("y", margin.top);
+  m_text.attr("text", "Q=" + value).attr("x", coord-2).attr("y", margin.top);
   m_line.attr("x1", coord).attr("x2", coord).attr("y1", y(1)).attr("y2", y(0));
 }

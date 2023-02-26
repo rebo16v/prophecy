@@ -58,11 +58,11 @@ function message(e) {
     sims = sims.sort();
     let l = sims.length;
     qs = [sims[Math.round(l/4)], sims[Math.round(l/2)], sims[Math.round(3*l/4)]];
-    q_lines = [1, 2, 3].map(q => {
+    q_texts = [1, 2, 3].map(q => {
       svg.append("text").text("Q" + q)
       .attr("text-anchor", "end").attr("font-family", "Arial").attr("fill", "yellow");
     });
-    q_texts = [1, 2, 3].map(q => {
+    q_lines = [1, 2, 3].map(q => {
       svg.append("line").attr("stroke", "blue");
     });
     stats = true;
@@ -118,8 +118,8 @@ function resize() {
     qs.map(q => x(q))
       .forEach((q,i) => {
         console.log(i + " => " + q);
-        q_lines[i].attr("x1", q).attr("x2", q).attr("y1", y(1)).attr("y2", y(0));
         q_texts[i].attr("x", q-2).attr("y", (i+2)*margin.top);
+        q_lines[i].attr("x1", q).attr("x2", q).attr("y1", y(1)).attr("y2", y(0));
       });
   }
   repaint();

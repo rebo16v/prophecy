@@ -69,7 +69,7 @@ function message(e) {
     .map((q,i) => {
       svg.append("line")
       .attr("stroke", "blue")
-      .attr("stroke-dasharray=", "5 5")
+      .attr("stroke-dasharray", "5 5")
       .attr("x1", q).attr("x2", q).attr("y1", y(1)).attr("y2", y(0));
     });
     stats = true;
@@ -121,6 +121,7 @@ function resize() {
   name_text.attr("x", width-margin.right).attr("y", margin.top);
   iter_text.attr("x", width-margin.right).attr("y", 2*margin.top);
   if (stats) {
+    console.log("stats => " + q_texts.length);
     qs.map(q => x(q))
       .forEach((q,i) => {
         console.log(i + " => " + q);

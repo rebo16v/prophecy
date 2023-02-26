@@ -65,12 +65,12 @@ function message(e) {
         .attr("x", x(q)-2).attr("y", 2*(i+2)*margin.top);
       });
     q_lines = qs.map(q => x(q))
-    .map((q,i) => {
-      svg.append("line")
-      .attr("stroke", "blue")
-      .attr("stroke-dasharray", "5 5")
-      .attr("x1", q).attr("x2", q).attr("y1", y(1)).attr("y2", y(0));
-    });
+      .map((q,i) => {
+        svg.append("line")
+        .attr("stroke", "blue")
+        .attr("stroke-dasharray", "5 5")
+        .attr("x1", q).attr("x2", q).attr("y1", y(1)).attr("y2", y(0));
+      });
     mean_line.remove();
     mean_text.remove();
     stats = true;
@@ -125,8 +125,8 @@ function resize() {
   name_text.attr("x", width-margin.right).attr("y", margin.top);
   iter_text.attr("x", width-margin.right).attr("y", 2*margin.top);
   if (stats) {
-    console.log("stats => " + q_texts.length);
-    console.log("stats => " + q_lines.length);
+    q_texts.forEach(x => console.log("q_text => " + x));
+    q_lines.forEach(x => console.log("q_line => " + x));
     qs.map(q => x(q))
       .forEach((q,i) => {
         console.log(i + " => " + q);

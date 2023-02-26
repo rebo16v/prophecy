@@ -58,12 +58,11 @@ function message(e) {
     sims = sims.sort();
     let l = sims.length;
     qs = [sims[Math.round(l/4)], sims[Math.round(l/2)], sims[Math.round(3*l/4)]];
-    q_texts = qs.map(q => x(q))
-      .map((q,i) => {
+    q_texts = qs.map((q,i) => {
         svg.append("text")
         .attr("text-anchor", "end").attr("font-family", "Arial").attr("fill", "blue")
-        .text("Q" + (i+1))
-        .attr("x", q-2).attr("y", 2*(i+2)*margin.top);
+        .text("Q" + (i+1) + "=" + q);
+        .attr("x", x(q)-2).attr("y", 2*(i+2)*margin.top);
       });
     q_lines = qs.map(q => x(q))
     .map((q,i) => {
@@ -72,6 +71,8 @@ function message(e) {
       .attr("stroke-dasharray", "5 5")
       .attr("x1", q).attr("x2", q).attr("y1", y(1)).attr("y2", y(0));
     });
+    mean_line.remove();
+    mean_text.remove();
     stats = true;
   }
 }
@@ -96,6 +97,7 @@ function repaint() {
               .attr("y", function(d) {return y(d.length/sims.length)})
               .attr("width", function(d) {return x(d.x1) - x(d.x0) - 2})
               .attr("height", function(d) {return y(0) - y(d.length/sims.length)}));
+if (!stats) {
   let mean_x = x(mean)
   mean_line
     .attr("x1", mean_x)
@@ -106,6 +108,7 @@ function repaint() {
     .text("mean=" + mean)
     .attr("x", mean_x-2)
     .attr("y", margin.top);
+  }
 }
 
 function resize() {

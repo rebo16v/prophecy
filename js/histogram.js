@@ -30,7 +30,6 @@ window.addEventListener("load", (e) => {
   iter_text = svg.append("text").attr("text-anchor", "end").attr("font-family", "Arial").attr("font-size", "smaller").attr("fill", "blue").attr("x", width-margin.right).attr("y", 2*margin.top);
   mean_line = svg.append("line").attr("stroke", "blue");
   mean_text = svg.append("text").attr("text-anchor", "end").attr("font-family", "Arial").attr("font-size", "smaller").attr("fill", "blue");
-  svg.on("mousemove", e => console.log("mousemove => " + e));
   window.addEventListener("message", message, false);
   window.addEventListener("resize", resize, false);
 });
@@ -75,6 +74,7 @@ function message(e) {
     mean_line.remove();
     mean_text.remove();
     stats = true;
+    svg.on("mousemove", e => console.log("mousemove => (" + e.x + "," + e.y + ")"));
   }
 }
 

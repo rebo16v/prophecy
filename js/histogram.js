@@ -74,7 +74,7 @@ function message(e) {
     mean_line.remove();
     mean_text.remove();
     stats = true;
-    svg.on("mousemove", e => console.log("mousemove => (" + e.x + "," + e.y + ")"));
+    svg.on("mousemove", mousemove);
   }
 }
 
@@ -126,6 +126,7 @@ function resize() {
   iter_text.attr("x", width-margin.right).attr("y", 2*margin.top);
   if (stats) {
     console.log("stats => " + q_texts.length);
+    console.log("stats => " + q_lines.length);
     qs.map(q => x(q))
       .forEach((q,i) => {
         console.log(i + " => " + q);
@@ -134,4 +135,9 @@ function resize() {
       });
   }
   repaint();
+}
+
+function mousemove(e) {
+  let value = x.invert(e.x);
+  console.log("mousemove: " + e.x + " => " + value);
 }

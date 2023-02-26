@@ -61,7 +61,7 @@ function message(e) {
     q_texts = qs.map((q,i) => {
         svg.append("text")
         .attr("text-anchor", "end").attr("font-family", "Arial").attr("fill", "blue")
-        .text("Q" + (i+1) + "=" + q);
+        .text("Q" + (i+1) + "=" + q)
         .attr("x", x(q)-2).attr("y", 2*(i+2)*margin.top);
       });
     q_lines = qs.map(q => x(q))

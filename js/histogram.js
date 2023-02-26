@@ -7,11 +7,13 @@ let mean = 0;
 
 let margin = { top: 20, right: 20, bottom: 20, left: 30 }
 let width, height;
+width = window.innerWidth - margin.left;
+height = window.innerHeight - margin.top;
 
 let svg = d3.select("body")
   .append("svg")
     .attr("width", width)
-    .attr("height", height)
+    .attr("height", height);
 
 let axis = [
   svg.append("g").attr("transform", `translate(0,${height - margin.bottom})`),
@@ -26,8 +28,9 @@ let stats = false;
 let qs, q_lines, q_texts;
 
 window.addEventListener("load", (e) => {
-  width = window.innerWidth-20;
-  height = window.innerHeight-20;
+  console.log("load");
+  width = window.innerWidth - margin.left;
+  height = window.innerHeight - margin.top;
   const query = window.location.search;
   const params = new URLSearchParams(query);
   name_text.text(params.get("name")).attr("x", width-margin.right).attr("y", margin.top);

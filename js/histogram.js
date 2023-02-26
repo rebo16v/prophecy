@@ -63,7 +63,7 @@ function message(e) {
         svg.append("text")
         .attr("text-anchor", "end").attr("font-family", "Arial").attr("fill", "blue")
         .text("Q" + (i+1))
-        .attr("x", q-2).attr("y", (i+2)*margin.top);
+        .attr("x", q-2).attr("y", 2*(i+2)*margin.top);
       });
     q_lines = qs.map(q => x(q))
     .map((q,i) => {

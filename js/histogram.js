@@ -144,7 +144,7 @@ function resize() {
 
 function mousemove(e) {
   const coord = e.x;
-  if ((coord>margin.left) && (coord<(width-margin.right)) {
+  if ((coord>margin.left) && (coord<(width-margin.right))) {
     const value = x.invert(coord);
     const idx = sims.findIndex(x => x>value);
     console.log("idx => " + idx);

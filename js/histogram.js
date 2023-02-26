@@ -14,7 +14,6 @@ let stats = false;
 let qs, q_lines, q_texts;
 
 window.addEventListener("load", (e) => {
-  console.log("load");
   const query = window.location.search;
   const params = new URLSearchParams(query);
   nbins = parseInt(params.get("nbins"));
@@ -38,10 +37,8 @@ window.addEventListener("load", (e) => {
 function message(e) {
   let json = JSON.parse(e.data);
   let iter = parseInt(json.iter);
-  console.log("iter => "+ iter);
   if (iter >= 0) {
     let value = parseFloat(json.value);
-    console.log("value => "+ value);
     iter_text.text("iter " + iter).attr("x", width-margin.right).attr("y", 2*margin.top);
     if (sims.length == 0) {
       x = d3.scaleLinear()
@@ -120,6 +117,7 @@ function resize() {
   if (stats) {
     qs.map(q => x(q))
       .forEach((q,i) => {
+        console.log(i + " => " + q);
         q_lines[i].attr("x1", q).attr("x2", q).attr("y1", y(1)).attr("y2", y(0));
         q_texts[i].attr("x", q-2).attr("y", (i+2)*margin.top);
       });

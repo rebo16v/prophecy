@@ -7,34 +7,30 @@ let mean = 0;
 
 let margin = { top: 20, right: 20, bottom: 20, left: 30 }
 let width, height;
-width = window.innerWidth - margin.left;
-height = window.innerHeight - margin.top;
 
-let svg = d3.select("body")
-  .append("svg")
-    .attr("width", width)
-    .attr("height", height);
-
-let axis = [
-  svg.append("g").attr("transform", `translate(0,${height - margin.bottom})`),
-  svg.append("g").attr("transform", `translate(${margin.left},0)`)];
-
-let name_text = svg.append("text").attr("text-anchor", "end").attr("font-family", "Arial").attr("fill", "blue");
-let iter_text = svg.append("text").attr("text-anchor", "end").attr("font-family", "Arial").attr("font-size", "smaller").attr("fill", "blue");
-let mean_line = svg.append("line").attr("stroke", "blue");
-let mean_text = svg.append("text").attr("text-anchor", "end").attr("font-family", "Arial").attr("font-size", "smaller").attr("fill", "blue");
-
+let svg, axis;
+let name_text, iter_text, mean_line, mean_text;
 let stats = false;
 let qs, q_lines, q_texts;
 
 window.addEventListener("load", (e) => {
   console.log("load");
-  width = window.innerWidth - margin.left;
-  height = window.innerHeight - margin.top;
   const query = window.location.search;
   const params = new URLSearchParams(query);
-  name_text.text(params.get("name")).attr("x", width-margin.right).attr("y", margin.top);
   nbins = parseInt(params.get("nbins"));
+  width = window.innerWidth - margin.left;
+  height = window.innerHeight - margin.top;
+  svg = d3.select("body")
+    .append("svg")
+      .attr("width", width)
+      .attr("height", height);
+  axis = [
+    svg.append("g").attr("transform", `translate(0,${height - margin.bottom})`),
+    svg.append("g").attr("transform", `translate(${margin.left},0)`)];
+  name_text = svg.append("text").attr("text-anchor", "end").attr("font-family", "Arial").attr("fill", "blue").text(params.get("name")).attr("x", width-margin.right).attr("y", margin.top);
+  iter_text = svg.append("text").attr("text-anchor", "end").attr("font-family", "Arial").attr("font-size", "smaller").attr("fill", "blue").attr("x", width-margin.right).attr("y", 2*margin.top);
+  mean_line = svg.append("line").attr("stroke", "blue");
+  mean_text = svg.append("text").attr("text-anchor", "end").attr("font-family", "Arial").attr("font-size", "smaller").attr("fill", "blue");
   window.addEventListener("message", message, false);
   window.addEventListener("resize", resize, false);
 });

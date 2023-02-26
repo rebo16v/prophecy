@@ -30,6 +30,7 @@ window.addEventListener("load", (e) => {
   iter_text = svg.append("text").attr("text-anchor", "end").attr("font-family", "Arial").attr("font-size", "smaller").attr("fill", "blue").attr("x", width-margin.right).attr("y", 2*margin.top);
   mean_line = svg.append("line").attr("stroke", "blue");
   mean_text = svg.append("text").attr("text-anchor", "end").attr("font-family", "Arial").attr("font-size", "smaller").attr("fill", "blue");
+  svg.on("mousemove", e => console.log("mousemove => " + e));
   window.addEventListener("message", message, false);
   window.addEventListener("resize", resize, false);
 });
@@ -60,7 +61,7 @@ function message(e) {
     qs = [sims[Math.round(l/4)], sims[Math.round(l/2)], sims[Math.round(3*l/4)]];
     q_texts = qs.map((q,i) => {
         svg.append("text")
-        .attr("text-anchor", "end").attr("font-family", "Arial").attr("fill", "blue")
+        .attr("text-anchor", "end").attr("font-family", "Arial").attr("font-size", "smaller").attr("fill", "blue")
         .text("Q" + (i+1) + "=" + q)
         .attr("x", x(q)-2).attr("y", 2*(i+2)*margin.top);
       });

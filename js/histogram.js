@@ -12,6 +12,8 @@ let svg, axis;
 let name_text, iter_text, mean_line, mean_text;
 let stats = false;
 let qs, q_lines, q_texts;
+let mouse = false;
+let m_line, m_text;
 
 window.addEventListener("load", (e) => {
   const query = window.location.search;
@@ -71,9 +73,15 @@ function message(e) {
           .attr("stroke-dasharray", "5 5")
           .attr("x1", q).attr("x2", q).attr("y1", y(1)).attr("y2", y(0));
       });
+    m_text = svg.append("text")
+      .attr("text-anchor", "end").attr("font-family", "Arial").attr("font-size", "smaller").attr("fill", "blue");
+    m_line = svg.append("line")
+        .attr("stroke", "blue");
     mean_line.remove();
     mean_text.remove();
     stats = true;
+    svg.on("mouseenter", x => {mouse=true;});
+    svg.on("mouseleave", x => {mouse=false;});
     svg.on("mousemove", mousemove);
   }
 }
@@ -98,17 +106,17 @@ function repaint() {
               .attr("y", function(d) {return y(d.length/sims.length)})
               .attr("width", function(d) {return x(d.x1) - x(d.x0) - 2})
               .attr("height", function(d) {return y(0) - y(d.length/sims.length)}));
-if (!stats) {
-  let mean_x = x(mean)
-  mean_line
-    .attr("x1", mean_x)
-    .attr("x2", mean_x)
-    .attr("y1", y(1))
-    .attr("y2", y(0));
-  mean_text
-    .text("mean=" + mean)
-    .attr("x", mean_x-2)
-    .attr("y", margin.top);
+  if (!stats) {
+    let mean_x = x(mean)
+    mean_line
+      .attr("x1", mean_x)
+      .attr("x2", mean_x)
+      .attr("y1", y(1))
+      .attr("y2", y(0));
+    mean_text
+      .text("mean=" + mean)
+      .attr("x", mean_x-2)
+      .attr("y", margin.top);
   }
 }
 
@@ -125,11 +133,8 @@ function resize() {
   name_text.attr("x", width-margin.right).attr("y", margin.top);
   iter_text.attr("x", width-margin.right).attr("y", 2*margin.top);
   if (stats) {
-    q_texts.forEach(x => console.log("q_text => " + x));
-    q_lines.forEach(x => console.log("q_line => " + x));
     qs.map(q => x(q))
       .forEach((q,i) => {
-        console.log(i + " => " + q);
         q_texts[i].attr("x", q-2).attr("y", (i+2)*margin.top);
         q_lines[i].attr("x1", q).attr("x2", q).attr("y1", y(1)).attr("y2", y(0));
       });
@@ -138,6 +143,9 @@ function resize() {
 }
 
 function mousemove(e) {
-  let value = x.invert(e.x);
-  console.log("mousemove: " + e.x + " => " + value);
+  let coord = e.x;
+  let value = x.invert(coord);
+  console.log("mousemove: " + coord + " => " + value);
+  m_text.attr("text", value).attr("x", coord-2).attr("y", margin.top);
+  m_line.attr("x1", coord).attr("x2", coord).attr("y1", y(1)).attr("y2", y(0));
 }

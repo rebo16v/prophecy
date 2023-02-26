@@ -59,17 +59,17 @@ function message(e) {
     let l = sims.length;
     qs = [sims[Math.round(l/4)], sims[Math.round(l/2)], sims[Math.round(3*l/4)]];
     q_texts = qs.map((q,i) => {
-        svg.append("text")
-        .attr("text-anchor", "end").attr("font-family", "Arial").attr("font-size", "smaller").attr("fill", "blue")
-        .text("Q" + (i+1) + "=" + q)
-        .attr("x", x(q)-2).attr("y", 2*(i+2)*margin.top);
+        return svg.append("text")
+          .attr("text-anchor", "end").attr("font-family", "Arial").attr("font-size", "smaller").attr("fill", "blue")
+          .text("Q" + (i+1) + "=" + q)
+          .attr("x", x(q)-2).attr("y", 2*(i+2)*margin.top);
       });
     q_lines = qs.map(q => x(q))
       .map((q,i) => {
-        svg.append("line")
-        .attr("stroke", "blue")
-        .attr("stroke-dasharray", "5 5")
-        .attr("x1", q).attr("x2", q).attr("y1", y(1)).attr("y2", y(0));
+        return svg.append("line")
+          .attr("stroke", "blue")
+          .attr("stroke-dasharray", "5 5")
+          .attr("x1", q).attr("x2", q).attr("y1", y(1)).attr("y2", y(0));
       });
     mean_line.remove();
     mean_text.remove();

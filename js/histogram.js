@@ -147,9 +147,11 @@ function mousemove(e) {
   if ((coord>margin.left) && (coord<(width-margin.right))) {
     const value = x.invert(coord);
     const idx = sims.findIndex(x => x>value);
-    console.log("idx => " + idx);
     const q = 100 * (idx / sims.length);
-    m_text.text("Q=" + value + "%").attr("x", coord-2).attr("y", margin.top);
-    m_line.attr("x1", coord).attr("x2", coord).attr("y1", y(1)).attr("y2", y(0));
+    m_text.text("Q=" + q + "%").attr("x", coo<rd-2).attr("y", margin.top).attr("visibility", "visible");
+    m_line.attr("x1", coord).attr("x2", coord).attr("y1", y(1)).attr("y2", y(0)).attr("visibility", "visible");
+  } else {
+    m_text.attr("visibility", "hidden");
+    m_line.attr("visibility", "hidden");
   }
 }

@@ -143,9 +143,10 @@ function resize() {
 }
 
 function mousemove(e) {
-  let coord = e.x;
-  let value = x.invert(coord);
-  console.log("mousemove: " + coord + " => " + value);
-  m_text.attr("text", "Q=" + value).attr("x", coord-2).attr("y", margin.top);
+  const coord = e.x;
+  const value = x.invert(coord);
+  const idx = sims.findIndex(x => x>value);
+  const q = 100 * (idx / sims.length);
+  m_text.text("Q=" + value + "%").attr("x", coord-2).attr("y", margin.top);
   m_line.attr("x1", coord).attr("x2", coord).attr("y1", y(1)).attr("y2", y(0));
 }

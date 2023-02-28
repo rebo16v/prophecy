@@ -7,9 +7,12 @@ Office.onReady((info) => {
         document.getElementById("input").onchange = radioChange;
         document.getElementById("output").onchange = radioChange;
         document.getElementById("config").onclick = config;
-        document.getElementById("stop").onclick = montecarlo_stop;
-        document.getElementById("play").onclick = montecarlo_start;
-        document.getElementById("pause").onclick = montecarlo_pause;
+        // document.getElementById("stop").onclick = montecarlo_stop;
+        // document.getElementById("play").onclick = montecarlo_start;
+        // document.getElementById("pause").onclick = montecarlo_pause;
+        document.getElementById("stop").onclick = tornado_stop;
+        document.getElementById("play").onclick = tornado_start;
+        document.getElementById("pause").onclick = tornado_pause;
 
         Excel.run((context) => {
             context.workbook.onSelectionChanged.add(workbookChange)

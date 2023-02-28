@@ -30,9 +30,9 @@ async function montecarlo_start() {
         if (!running) break;
         while (paused) {await new Promise(r => setTimeout(r, 1000));}
         app.suspendApiCalculationUntilNextSync();
-        stepIn(confs_in, context);
+        montecarlo_in(confs_in, context);
         await context.sync();
-        let outputs = stepOut(confs_out, context);
+        let outputs = montecarlo_out(confs_out, context);
         await context.sync();
         outputs.forEach((o,i) => {
           let msg = JSON.stringify({iter: k, value: o.values[0][0]});
@@ -52,7 +52,7 @@ async function montecarlo_start() {
   });
 }
 
-function stepIn(confs, context) {
+function montecarlo_in(confs, context) {
   confs.forEach(conf => {
     let input = 0;
     switch (conf[3]) {
@@ -76,7 +76,7 @@ function stepIn(confs, context) {
   });
 }
 
-function stepOut(confs, context) {
+function montecarlo_out(confs, context) {
   let ranges = [];
   confs.forEach(conf => {
     let [s, c] = conf[1].split("!");

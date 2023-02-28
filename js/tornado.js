@@ -2,7 +2,7 @@ let win;
 let tornado_running = false;
 let tornado_paused = false;
 
-async function montecarlo_start() {
+async function tornado_start() {
   await Excel.run(async(context) => {
     document.getElementById("play").disabled = true;
     document.getElementById("stop").disabled = false;
@@ -31,9 +31,9 @@ async function montecarlo_start() {
           if (!tornado_running) break;
           while (tornado_paused) {await new Promise(r => setTimeout(r, 1000));}
           app.suspendApiCalculationUntilNextSync();
-          stepIn(c, context);
+          tornado_in(c, context);
           await context.sync();
-          let outputs = stepOut(confs_out, context);
+          let outputs = tornado_out(confs_out, context);
           await context.sync();
           outputs.forEach((o,i) => {
             let msg = JSON.stringify({input: i, iter: k, value: o.values[0][0]});
@@ -54,7 +54,7 @@ async function montecarlo_start() {
   });
 }
 
-function stepIn(conf, context) {
+function tornado_in(conf, context) {
   let input;
   switch (conf[3]) {
     case "uniform":
@@ -76,7 +76,7 @@ function stepIn(conf, context) {
   cell.values = [[input]];
 }
 
-function stepOut(confs, context) {
+function tornado_out(confs, context) {
   let ranges = [];
   confs.forEach(conf => {
     let [s, c] = conf[1].split("!");
@@ -88,7 +88,7 @@ function stepOut(confs, context) {
   return ranges;
 }
 
-async function montecarlo_stop() {
+async function tornado_stop() {
   console.log("montecarlo_stop");
   document.getElementById("stop").disabled = true;
   document.getElementById("play").disabled = false;

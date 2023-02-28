@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Prophecy - Forecast</title>
+    <script type="text/javascript"src="https://d3js.org/d3.v7.js"></script>
+</head>
+
+<body>
+
+</body>
+
+<script>
+window.addEventListener("load", (e) => {
+  window.addEventListener("message", message, false);
+  window.addEventListener("resize", resize, false);
+
+function message(e) {
+  let json = JSON.parse(e.data);
+  console.log("message => " + json);
+}
+
+function resize(e) {
+  console.log("resize => " + e);
+}
+</script>
+
+</html>

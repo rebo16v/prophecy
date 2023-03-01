@@ -22,6 +22,7 @@ async function tornado_start() {
       tornado_win = [];
       let niter = parseInt(document.getElementById("niter").value);
       let nbins = parseInt(document.getElementById("nbins").value);
+      console.log("niter => " + niter)
       confs_out.forEach((c,i) => {
         tornado_win[i] = window.open("https://rebo16v.github.io/prophecy/tornado.html?id=" + i + "&name=" + c[0] + "&nbins=" + nbins, "forecast_"+i);
       });

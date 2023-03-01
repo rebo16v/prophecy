@@ -26,15 +26,15 @@ async function tornado_start() {
         tornado_win[i] = window.open("https://rebo16v.github.io/prophecy/tornado.html?id=" + i + "&name=" + c[0], "tornado_"+i);
       });
       await new Promise(r => setTimeout(r, 1000));
-      confs_in.forEach(async(c,i) => {
+      confs_in.forEach((c,i) => {
         for (let k = 0; k < niter; k++) {
           console.log("k = " + k);
           console.log("running = " + tornado_running);
-          if (!tornado_running) break;
-          while (tornado_paused) {await new Promise(r => setTimeout(r, 1000));}
+          // if (!tornado_running) break;
+          // while (tornado_paused) {await new Promise(r => setTimeout(r, 1000));}
           app.suspendApiCalculationUntilNextSync();
           tornado_in(c, context);
-          await context.sync();
+          context.sync();
           let outputs = tornado_out(confs_out, context);
           await context.sync();
           outputs.forEach((o,j) => {

@@ -1,4 +1,4 @@
-let win;
+let tornado_win;
 let tornado_running = false;
 let tornado_paused = false;
 
@@ -19,11 +19,11 @@ async function tornado_start() {
       await context.sync();
       let confs_in = range_in.values;
       let confs_out = range_out.values;
-      win = [];
+      tornado_win = [];
       let niter = parseInt(document.getElementById("niter").value);
       let nbins = parseInt(document.getElementById("nbins").value);
       confs_out.forEach((c,i) => {
-        win[i] = window.open("https://rebo16v.github.io/prophecy/tornado.html?id=" + i + "&name=" + c[0] + "&nbins=" + nbins, "forecast_"+i);
+        tornado_win[i] = tornado_window.open("https://rebo16v.github.io/prophecy/tornado.html?id=" + i + "&name=" + c[0] + "&nbins=" + nbins, "forecast_"+i);
       });
       await new Promise(r => setTimeout(r, 1000));
       confs_in.forEach(async (c,i) => {
@@ -37,12 +37,12 @@ async function tornado_start() {
           await context.sync();
           outputs.forEach((o,i) => {
             let msg = JSON.stringify({input: i, iter: k, value: o.values[0][0]});
-            win[i].postMessage(msg);
+            tornado_win[i].postMessage(msg);
           });
         }
       });
       let msg = JSON.stringify({iter: -1});
-      win.forEach(w => {
+      tornado_win.forEach(w => {
         w.postMessage(msg);
       });
       document.getElementById("play").disabled = false;
@@ -96,7 +96,7 @@ async function tornado_stop() {
   tornado_running = false;
 }
 
-async function montecarlo_pause() {
+async function tornado_pause() {
   console.log("montecarlo_pause");
   document.getElementById("pause").disabled = true;
   document.getElementById("play").disabled = false;

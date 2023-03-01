@@ -1,15 +1,15 @@
-let win;
-let running = false;
-let paused = false;
+let montecarlo_win;
+let montecarlo_running = false;
+let montecarlo_paused = false;
 
 async function montecarlo_start() {
   await Excel.run(async(context) => {
     document.getElementById("play").disabled = true;
     document.getElementById("stop").disabled = false;
     document.getElementById("pause").disabled = false;
-    paused = false;
-    if (!running) {
-      running = true;
+    montecarlo_paused = false;
+    if (!montecarlo_running) {
+      montecarlo_running = true;
       let app = context.workbook.application;
       var prophecy = context.workbook.worksheets.getItem("prophecy");
       range_in = prophecy.getRange("A" + 2 + ":G" + (1+randoms.length));
@@ -19,16 +19,16 @@ async function montecarlo_start() {
       await context.sync();
       let confs_in = range_in.values;
       let confs_out = range_out.values;
-      win = [];
+      montecarlo_win = [];
       let niter = parseInt(document.getElementById("niter").value);
       let nbins = parseInt(document.getElementById("nbins").value);
       confs_out.forEach((c,i) => {
-        win[i] = window.open("https://rebo16v.github.io/prophecy/montecarlo.html?id=" + i + "&name=" + c[0] + "&nbins=" + nbins, "forecast_"+i);
+        montecarlo_win[i] = montecarlo_window.open("https://rebo16v.github.io/prophecy/montecarlo.html?id=" + i + "&name=" + c[0] + "&nbins=" + nbins, "forecast_"+i);
       });
       await new Promise(r => setTimeout(r, 1000));
       for (let k = 0; k < niter; k++) {
-        if (!running) break;
-        while (paused) {await new Promise(r => setTimeout(r, 1000));}
+        if (!montecarlo_running) break;
+        while (montecarlo_paused) {await new Promise(r => setTimeout(r, 1000));}
         app.suspendApiCalculationUntilNextSync();
         montecarlo_in(confs_in, context);
         await context.sync();
@@ -36,18 +36,18 @@ async function montecarlo_start() {
         await context.sync();
         outputs.forEach((o,i) => {
           let msg = JSON.stringify({iter: k, value: o.values[0][0]});
-          win[i].postMessage(msg);
+          montecarlo_win[i].postMessage(msg);
         });
       }
       let msg = JSON.stringify({iter: -1});
-      win.forEach(w => {
+      montecarlo_win.forEach(w => {
         w.postMessage(msg);
       });
       document.getElementById("play").disabled = false;
       document.getElementById("stop").disabled = true;
       document.getElementById("pause").disabled = true;
-      running = false;
-      paused = false;
+      montecarlo_running = false;
+      montecarlo_paused = false;
     }
   });
 }
@@ -93,12 +93,12 @@ async function montecarlo_stop() {
   document.getElementById("stop").disabled = true;
   document.getElementById("play").disabled = false;
   document.getElementById("pause").disabled = true;
-  running = false;
+  montecarlo_running = false;
 }
 
 async function montecarlo_pause() {
   console.log("montecarlo_pause");
   document.getElementById("pause").disabled = true;
   document.getElementById("play").disabled = false;
-  paused = true;
+  montecarlo_paused = true;
 }

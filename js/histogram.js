@@ -33,9 +33,9 @@ window.addEventListener("load", (e) => {
        .domain([0, 1])
        .range([height - margin.bottom, margin.top]);
   axis[1].call(d3.axisLeft(y));
-  h_lines = Array(9).map((_,i) => {
-    let h = y((i+1)/10);
-    console.log(((i+1)/10) + "=>" + h);
+  h_lines = [1,2,3,4,5,6,7,8,9].map(c => {
+    let h = y(c/10);
+    console.log((c/10) + "=>" + h);
     return svg.append("line")
       .attr("stroke", "black")
       .attr("stroke-dasharray", "2 3")

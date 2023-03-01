@@ -89,7 +89,6 @@ function montecarlo_out(confs, context) {
 }
 
 async function montecarlo_stop() {
-  console.log("montecarlo_stop");
   document.getElementById("stop").disabled = true;
   document.getElementById("play").disabled = false;
   document.getElementById("pause").disabled = true;
@@ -97,7 +96,6 @@ async function montecarlo_stop() {
 }
 
 async function montecarlo_pause() {
-  console.log("montecarlo_pause");
   document.getElementById("pause").disabled = true;
   document.getElementById("play").disabled = false;
   montecarlo_paused = true;

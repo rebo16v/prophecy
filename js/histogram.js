@@ -35,10 +35,9 @@ window.addEventListener("load", (e) => {
   axis[1].call(d3.axisLeft(y));
   h_lines = [1,2,3,4,5,6,7,8,9].map(c => {
     let h = y(c/10);
-    console.log((c/10) + "=>" + h);
     return svg.append("line")
       .attr("stroke", "black")
-      .attr("stroke-dasharray", "2 3")
+      .attr("stroke-dasharray", "2 5")
       .attr("x1", margin.left).attr("x2", width-margin.right)
       .attr("y1", h).attr("y2", h);
     });

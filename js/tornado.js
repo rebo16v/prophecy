@@ -29,9 +29,9 @@ async function tornado_start() {
       confs_in.forEach(async(c,i) => {
         for (let k = 0; k < niter; k++) {
           console.log("k = " + k);
+          console.log("running = " + tornado_running);
           if (!tornado_running) break;
           while (tornado_paused) {await new Promise(r => setTimeout(r, 1000));}
-          console.log("hola");
           app.suspendApiCalculationUntilNextSync();
           tornado_in(c, context);
           await context.sync();

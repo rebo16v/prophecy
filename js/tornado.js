@@ -92,7 +92,7 @@ function tornado_out(confs, context) {
 }
 
 async function tornado_stop() {
-  console.log("montecarlo_stop");
+  console.log("tornado_stop");
   document.getElementById("stop").disabled = true;
   document.getElementById("play").disabled = false;
   document.getElementById("pause").disabled = true;
@@ -100,7 +100,7 @@ async function tornado_stop() {
 }
 
 async function tornado_pause() {
-  console.log("montecarlo_pause");
+  console.log("tornado_pause");
   document.getElementById("pause").disabled = true;
   document.getElementById("play").disabled = false;
   tornado_paused = true;

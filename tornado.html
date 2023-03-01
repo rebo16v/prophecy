@@ -18,7 +18,7 @@ window.addEventListener("load", (e) => {
 
 function message(e) {
   let json = JSON.parse(e.data);
-  console.log("message => " + json);
+  console.log("message => " + json.input + "," + json.iter + "," + json.value);
 }
 
 function resize(e) {

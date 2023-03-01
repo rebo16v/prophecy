@@ -22,13 +22,13 @@ async function tornado_start() {
       tornado_win = [];
       let niter = parseInt(document.getElementById("niter").value);
       let nbins = parseInt(document.getElementById("nbins").value);
-      console.log("niter => " + niter)
       confs_out.forEach((c,i) => {
-        tornado_win[i] = window.open("https://rebo16v.github.io/prophecy/tornado.html?id=" + i + "&name=" + c[0] + "&nbins=" + nbins, "forecast_"+i);
+        tornado_win[i] = window.open("https://rebo16v.github.io/prophecy/tornado.html?id=" + i + "&name=" + c[0], "tornado_"+i);
       });
       await new Promise(r => setTimeout(r, 1000));
       confs_in.forEach(async(c,i) => {
         for (let k = 0; k < niter; k++) {
+          console.log("k = " + k);
           if (!tornado_running) break;
           while (tornado_paused) {await new Promise(r => setTimeout(r, 1000));}
           app.suspendApiCalculationUntilNextSync();

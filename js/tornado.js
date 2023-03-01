@@ -36,13 +36,13 @@ async function tornado_start() {
           tornado_in(c, context);
           context.sync();
           let outputs = tornado_out(confs_out, context);
-          context.sync();
-          outputs.forEach((o,j) => {
-            let msg = JSON.stringify({input: i, iter: k, value: o.values[0][0]});
-            console.log("msg => " + msg);
-            // tornado_win[j].postMessage(msg);
-          });
-        }
+          context.sync().then(
+            outputs.forEach((o,j) => {
+              let msg = JSON.stringify({input: i, iter: k, value: o.values[0][0]});
+              console.log("msg => " + msg);
+              // tornado_win[j].postMessage(msg);
+            });
+          }
       });
       console.log("finito");
       let msg = JSON.stringify({iter: -1});

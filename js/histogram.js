@@ -14,6 +14,7 @@ let stats = false;
 let qs, q_lines, q_texts;
 let mouse = false;
 let m_line, m_text;
+let h_lines;
 
 window.addEventListener("load", (e) => {
   const query = window.location.search;
@@ -28,6 +29,14 @@ window.addEventListener("load", (e) => {
   axis = [
     svg.append("g").attr("transform", `translate(0,${height - margin.bottom})`),
     svg.append("g").attr("transform", `translate(${margin.left},0)`)];
+  h_lines = Array(9).map((_,i) => {
+    let h = y((i+1)/10);
+    return svg.append("line")
+      .attr("stroke", "black")
+      .attr("stroke-dasharray", "2 3")
+      .attr("x1", margin.left).attr("x2", width-margin.right)
+      .attr("y1", h).attr("y2", h);
+    });
   name_text = svg.append("text").attr("text-anchor", "end").attr("font-family", "Arial").attr("fill", "blue").text(params.get("name")).attr("x", width-margin.right).attr("y", margin.top);
   iter_text = svg.append("text").attr("text-anchor", "end").attr("font-family", "Arial").attr("font-size", "smaller").attr("fill", "blue").attr("x", width-margin.right).attr("y", 2*margin.top);
   mean_line = svg.append("line").attr("stroke", "blue");
@@ -130,6 +139,11 @@ function resize() {
   y.range([height - margin.bottom, margin.top]);
   axis[1].attr("transform", `translate(${margin.left},0)`);
   axis[1].call(d3.axisLeft(y));
+  h_lines.forEach((l,i) => {
+    let h = y((i+1)/10);
+    l.attr("x1", margin.left).attr("x2", width-margin.right)
+    .attr("y1", h).attr("y2", h);
+  });
   name_text.attr("x", width-margin.right).attr("y", margin.top);
   iter_text.attr("x", width-margin.right).attr("y", 2*margin.top);
   if (stats) {

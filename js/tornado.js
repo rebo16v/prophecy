@@ -39,7 +39,7 @@ async function tornado_start() {
           outputs.forEach((o,j) => {
             let msg = JSON.stringify({input: i, iter: k, value: o.values[0][0]});
             console.log("msg => " + msg);
-            // tornado_win[j].postMessage(msg);
+            tornado_win[j].postMessage(msg);
           });
         }
       });

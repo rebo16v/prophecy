@@ -31,6 +31,7 @@ async function tornado_start() {
           console.log("k = " + k);
           if (!tornado_running) break;
           while (tornado_paused) {await new Promise(r => setTimeout(r, 1000));}
+          console.log("hola");
           app.suspendApiCalculationUntilNextSync();
           tornado_in(c, context);
           await context.sync();

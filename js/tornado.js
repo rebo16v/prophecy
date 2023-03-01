@@ -44,6 +44,7 @@ async function tornado_start() {
           });
         }
       });
+      console.log("finito");
       let msg = JSON.stringify({iter: -1});
       tornado_win.forEach(w => {
         w.postMessage(msg);

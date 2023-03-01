@@ -29,6 +29,10 @@ window.addEventListener("load", (e) => {
   axis = [
     svg.append("g").attr("transform", `translate(0,${height - margin.bottom})`),
     svg.append("g").attr("transform", `translate(${margin.left},0)`)];
+  y = d3.scaleLinear()
+       .domain([0, 1])
+       .range([height - margin.bottom, margin.top]);
+  axis[1].call(d3.axisLeft(y));
   h_lines = Array(9).map((_,i) => {
     let h = y((i+1)/10);
     return svg.append("line")
@@ -56,10 +60,6 @@ function message(e) {
           .domain([0,2*value])
           .range([margin.left, width - margin.right]);
       axis[0].call(d3.axisBottom(x));
-      y = d3.scaleLinear()
-           .domain([0, 1])
-           .range([height - margin.bottom, margin.top]);
-     axis[1].call(d3.axisLeft(y));
     }
     sims.push(value);
     summa += value;

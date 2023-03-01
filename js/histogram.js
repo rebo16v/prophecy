@@ -35,6 +35,7 @@ window.addEventListener("load", (e) => {
   axis[1].call(d3.axisLeft(y));
   h_lines = Array(9).map((_,i) => {
     let h = y((i+1)/10);
+    console.log(((i+1)/10) + "=>" + h);
     return svg.append("line")
       .attr("stroke", "black")
       .attr("stroke-dasharray", "2 3")

@@ -23,7 +23,7 @@ async function tornado_start() {
       let niter = parseInt(document.getElementById("niter").value);
       let nbins = parseInt(document.getElementById("nbins").value);
       confs_out.forEach((c,i) => {
-        tornado_win[i] = window.open("https://rebo16v.github.io/prophecy/tornado.html?id=" + i + "&name=" + c[0], "tornado_"+i);
+        tornado_win[i] = window.open("tornado.html?id=" + i + "&name=" + c[0], "tornado_"+i);
       });
       await new Promise(r => setTimeout(r, 1000));
       confs_in.forEach((c,i) => {

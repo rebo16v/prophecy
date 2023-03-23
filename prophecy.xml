@@ -8,7 +8,7 @@
   <ProviderName>Contoso</ProviderName>
   <DefaultLocale>en-US</DefaultLocale>
   <DisplayName DefaultValue="Prophecy"/>
-  <Description DefaultValue="Montecarlo simulation"/>
+  <Description DefaultValue="Prophecy"/>
   <IconUrl DefaultValue="https://rebo16v.github.io/prophecy/images/prophecy32.png"/>
   <HighResolutionIconUrl DefaultValue="https://rebo16v.github.io/prophecy/images/prophecy64.png"/>
   <SupportUrl DefaultValue="https://learn.microsoft.com/office/dev/add-ins/overview/office-add-in-code-samples"/>
@@ -76,8 +76,8 @@
       <bt:ShortStrings>
         <bt:String id="GetStarted.Title" DefaultValue="Get started with the Prophecy add-in!"/>
         <bt:String id="CommandsGroup.Label" DefaultValue="Prophecy"/>
-        <bt:String id="TaskpaneButton.Label" DefaultValue="Montecarlo simulation"/>
-        <bt:String id="TaskpaneButton.SupertipTitle" DefaultValue="Montecarlo simulation"/>
+        <bt:String id="TaskpaneButton.Label" DefaultValue="Prophecy"/>
+        <bt:String id="TaskpaneButton.SupertipTitle" DefaultValue="Prophecy"/>
       </bt:ShortStrings>
       <bt:LongStrings>
         <bt:String id="GetStarted.Description" DefaultValue="Get started with the Prophecy add-in!"/>

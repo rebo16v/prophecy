@@ -2,6 +2,8 @@ let montecarlo_win;
 let montecarlo_running = false;
 let montecarlo_paused = false;
 
+const cumulativeSum = (sum => value => sum += value);
+
 async function montecarlo_start() {
   await Excel.run(async(context) => {
     document.getElementById("play").disabled = true;
@@ -12,9 +14,9 @@ async function montecarlo_start() {
       montecarlo_running = true;
       let app = context.workbook.application;
       var prophecy = context.workbook.worksheets.getItem("prophecy");
-      range_in = prophecy.getRange("A" + 2 + ":G" + (1+randoms.length));
+      range_in = prophecy.getRange("A" + 2 + ":E" + (1+randoms.length));
       range_in.load("values");
-      range_out = prophecy.getRange("I" + 2 + ":K" + (1+forecasts.length));
+      range_out = prophecy.getRange("G" + 2 + ":I" + (1+forecasts.length));
       range_out.load("values");
       await context.sync();
       let confs_in = range_in.values;
@@ -22,8 +24,16 @@ async function montecarlo_start() {
       montecarlo_win = [];
       let niter = parseInt(document.getElementById("niter").value);
       let nbins = parseInt(document.getElementById("nbins").value);
+      confs_in.forEach((c,i) => {
+        c[5] = JSON.parse(c[4])
+      });
+      confs_in
+        .filter(c => (c[3] == "discrete") || (c[3] == "custom"))
+        .forEach((c,i) => {
+          c[6] = c[5].map(p => p.prob).map(cumulativeSum(0));
+        });
       confs_out.forEach((c,i) => {
-        montecarlo_win[i] = window.open("https://rebo16v.github.io/prophecy/montecarlo.html?id=" + i + "&name=" + c[0] + "&nbins=" + nbins, "forecast_"+i);
+        montecarlo_win[i] = window.open("montecarlo.html?id=" + i + "&name=" + c[0] + "&nbins=" + nbins, "forecast_"+i);
       });
       await new Promise(r => setTimeout(r, 1000));
       for (let k = 0; k < niter; k++) {
@@ -57,16 +67,22 @@ function montecarlo_in(confs, context) {
     let input = 0;
     switch (conf[3]) {
       case "uniform":
-        input = sampleUniform(conf[4], conf[5]);
+        input = sampleUniform(conf[5].min, conf[5].max);
         break;
       case "normal":
-        input = sampleNormal(conf[4], conf[5]);
+        input = sampleNormal(conf[5].mean, conf[5].stdev);
         break;
       case "triangular":
-        input = sampleTriangular(conf[4], conf[5], conf[6]);
+        input = sampleTriangular(conf[5].min, conf[5].max, conf[5].mode);
         break;
       case "binomial":
-        input = sampleBinomial(conf[4]);
+        input = sampleBinomial(conf[5].yes);
+        break;
+      case "discrete":
+        input = sampleDiscrete(conf[5], conf[6]);
+        break;
+      case "custom":
+        input = sampleCustom(conf[5], conf[6]);
         break;
     }
     let [s, c] = conf[1].split("!");

@@ -1,6 +1,9 @@
 let x, y;
 let n_bins;
 let sims = [];
+let domain = [0,0];
+let max_prob = 1;
+let href;
 
 let summa = 0;
 let mean = 0;
@@ -11,7 +14,7 @@ let width, height;
 let svg, axis;
 let name_text, iter_text, mean_line, mean_text;
 let stats = false;
-let qs, q_lines, q_texts;
+let qs, q_lines, q_texts, q_texts1, q_texts2;
 let mouse = false;
 let m_line, m_text;
 let h_lines;
@@ -30,7 +33,7 @@ window.addEventListener("load", (e) => {
     svg.append("g").attr("transform", `translate(0,${height - margin.bottom})`),
     svg.append("g").attr("transform", `translate(${margin.left},0)`)];
   y = d3.scaleLinear()
-       .domain([0, 1])
+       .domain([0, max_prob])
        .range([height - margin.bottom, margin.top]);
   axis[1].call(d3.axisLeft(y));
   h_lines = [1,2,3,4,5,6,7,8,9].map(c => {
@@ -56,9 +59,21 @@ function message(e) {
     let value = parseFloat(json.value);
     iter_text.text("iter " + iter).attr("x", width-margin.right).attr("y", 2*margin.top);
     if (sims.length == 0) {
+      href = Math.abs(value/20);
+      domain = [value - href, value + href];
       x = d3.scaleLinear()
-          .domain([0,2*value])
+          .domain(domain)
           .range([margin.left, width - margin.right]);
+      axis[0].call(d3.axisBottom(x));
+    } else if (value <= domain[0]) {
+      console.log("se va por la izquierda.")
+      domain[0] = value - href;
+      x.domain(domain);
+      axis[0].call(d3.axisBottom(x));
+    } else if (value >= domain[1]) {
+      console.log("se va por la derecha.")
+      domain[1] = value + href;
+      x.domain(domain);
       axis[0].call(d3.axisBottom(x));
     }
     sims.push(value);
@@ -72,18 +87,33 @@ function message(e) {
     q_texts = qs.map((q,i) => {
         return svg.append("text")
           .attr("text-anchor", "end").attr("font-family", "Arial").attr("font-size", "smaller").attr("fill", "blue")
-          .text("Q" + (i+1) + "=" + q)
-          .attr("x", x(q)-2).attr("y", 2*(i+2)*margin.top);
-      });
+          .attr("y", 2*(i+2)*margin.top);
+        });
+    q_texts1 = q_texts.map((q,i) => {
+        return q.append("tspan")
+          .text("Q" + (i+1))
+          .attr("x", x(qs[i])-2)
+          .attr("dy", 15);
+        });
+    q_texts2 = q_texts.map((q,i) => {
+        return q.append("tspan")
+          .text(qs[i])
+          .attr("x", x(qs[i])-2)
+          .attr("dy", 15);
+        });
     q_lines = qs.map(q => x(q))
       .map((q,i) => {
         return svg.append("line")
           .attr("stroke", "blue")
           .attr("stroke-dasharray", "5 5")
-          .attr("x1", q).attr("x2", q).attr("y1", y(1)).attr("y2", y(0));
+          .attr("x1", q).attr("x2", q).attr("y1", height-margin.bottom).attr("y2", margin.top);
       });
     m_text = svg.append("text")
       .attr("text-anchor", "end").attr("font-family", "Arial").attr("font-size", "smaller").attr("fill", "blue");
+    m_text1 = m_text.append("tspan")
+      .attr("dy", 15);
+    m_text2 = m_text.append("tspan")
+      .attr("dy", 15);
     m_line = svg.append("line")
         .attr("stroke", "blue");
     mean_line.remove();
@@ -100,6 +130,12 @@ function repaint() {
       .domain(x.domain())
       .thresholds(x.ticks(nbins))
       (sims);
+  let prob = .1 * Math.ceil(Math.max.apply(Math, bins.map(b => b.length))/(.1*sims.length));
+  if (prob != max_prob) {
+    max_prob = prob;
+    y.domain([0, max_prob]);
+    axis[1].call(d3.axisLeft(y));
+  }
   svg.selectAll("rect")
       .data(bins)
       .join(
@@ -108,20 +144,20 @@ function repaint() {
               .attr("x", function(d) {return x(d.x0)})
               .attr("y", function(d) {return y(d.length/sims.length)})
               .attr("width", function(d) {return x(d.x1) - x(d.x0) - 2})
-              .attr("height", function(d) {return y(0) - y(d.length/sims.length)})
+              .attr("height", function(d) {return height - margin.top - y(d.length/sims.length)})
               .style("fill", "green"),
           update => update
               .attr("x", function(d) {return x(d.x0)})
               .attr("y", function(d) {return y(d.length/sims.length)})
               .attr("width", function(d) {return x(d.x1) - x(d.x0) - 2})
-              .attr("height", function(d) {return y(0) - y(d.length/sims.length)}));
+              .attr("height", function(d) {return height - margin.top - y(d.length/sims.length)}));
   if (!stats) {
     let mean_x = x(mean)
     mean_line
       .attr("x1", mean_x)
       .attr("x2", mean_x)
-      .attr("y1", y(1))
-      .attr("y2", y(0));
+      .attr("y1", height-margin.bottom)
+      .attr("y2", margin.top);
     mean_text
       .text("mean=" + mean)
       .attr("x", mean_x-2)
@@ -140,7 +176,7 @@ function resize() {
   axis[1].attr("transform", `translate(${margin.left},0)`);
   axis[1].call(d3.axisLeft(y));
   h_lines.forEach((l,i) => {
-    let h = y((i+1)/10);
+    let h = y(max_prob*(i+1)/10);
     l.attr("x1", margin.left).attr("x2", width-margin.right)
     .attr("y1", h).attr("y2", h);
   });
@@ -149,8 +185,10 @@ function resize() {
   if (stats) {
     qs.map(q => x(q))
       .forEach((q,i) => {
-        q_texts[i].attr("x", q-2).attr("y", (i+2)*margin.top);
-        q_lines[i].attr("x1", q).attr("x2", q).attr("y1", y(1)).attr("y2", y(0));
+        q_texts[i].attr("y", (i+2)*margin.top);
+        q_texts1[i].attr("x", q-2);
+        q_texts2[i].attr("x", q-2);
+        q_lines[i].attr("x1", q).attr("x2", q).attr("y1", height-margin.bottom).attr("y2", margin.top);
       });
   }
   repaint();
@@ -165,10 +203,14 @@ function mousemove(e) {
     if (idx>=0) {q = Math.round(100 * (idx / sims.length));}
     else {q = 100;}
 
-    m_text.text("Q=" + q + "%").attr("x", coord-2).attr("y", margin.top).attr("visibility", "visible");
-    m_line.attr("x1", coord).attr("x2", coord).attr("y1", y(1)).attr("y2", y(0)).attr("visibility", "visible");
+    m_text.attr("y", margin.top).attr("visibility", "visible");
+    m_text1.text("Q=" + q + "%").attr("x", coord-2).attr("visibility", "visible");
+    m_text2.text(value).attr("x", coord-2).attr("visibility", "visible");
+    m_line.attr("x1", coord).attr("x2", coord).attr("y1", height-margin.bottom).attr("y2", margin.top).attr("visibility", "visible");
   } else {
     m_text.attr("visibility", "hidden");
+    m_text1.attr("visibility", "hidden");
+    m_text2.attr("visibility", "hidden");
     m_line.attr("visibility", "hidden");
   }
 }

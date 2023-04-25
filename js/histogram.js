@@ -2,13 +2,13 @@ let x, y;
 let n_bins;
 let sims = [];
 let domain = [0,0];
-let max_prob = 1;
+let max_scale = .1, max_step = 10;
 let href;
 
 let summa = 0;
 let mean = 0;
 
-let margin = { top: 20, right: 20, bottom: 20, left: 30 }
+let margin = { top: 20, right: 20, bottom: 20, left: 40 }
 let width, height;
 
 let svg, axis;
@@ -17,7 +17,6 @@ let stats = false;
 let qs, q_lines, q_texts, q_texts1, q_texts2;
 let mouse = false;
 let m_line, m_text;
-let h_lines;
 
 window.addEventListener("load", (e) => {
   const query = window.location.search;
@@ -33,17 +32,9 @@ window.addEventListener("load", (e) => {
     svg.append("g").attr("transform", `translate(0,${height - margin.bottom})`),
     svg.append("g").attr("transform", `translate(${margin.left},0)`)];
   y = d3.scaleLinear()
-       .domain([0, max_prob])
+       .domain([0, max_scale * max_step])
        .range([height - margin.bottom, margin.top]);
   axis[1].call(d3.axisLeft(y));
-  h_lines = [1,2,3,4,5,6,7,8,9].map(c => {
-    let h = y(c/10);
-    return svg.append("line")
-      .attr("stroke", "black")
-      .attr("stroke-dasharray", "2 5")
-      .attr("x1", margin.left).attr("x2", width-margin.right)
-      .attr("y1", h).attr("y2", h);
-    });
   name_text = svg.append("text").attr("text-anchor", "end").attr("font-family", "Arial").attr("fill", "blue").text(params.get("name")).attr("x", width-margin.right).attr("y", margin.top);
   iter_text = svg.append("text").attr("text-anchor", "end").attr("font-family", "Arial").attr("font-size", "smaller").attr("fill", "blue").attr("x", width-margin.right).attr("y", 2*margin.top);
   mean_line = svg.append("line").attr("stroke", "blue");
@@ -66,12 +57,10 @@ function message(e) {
           .range([margin.left, width - margin.right]);
       axis[0].call(d3.axisBottom(x));
     } else if (value <= domain[0]) {
-      console.log("se va por la izquierda.")
       domain[0] = value - href;
       x.domain(domain);
       axis[0].call(d3.axisBottom(x));
     } else if (value >= domain[1]) {
-      console.log("se va por la derecha.")
       domain[1] = value + href;
       x.domain(domain);
       axis[0].call(d3.axisBottom(x));
@@ -130,11 +119,24 @@ function repaint() {
       .domain(x.domain())
       .thresholds(x.ticks(nbins))
       (sims);
-  let prob = .1 * Math.ceil(Math.max.apply(Math, bins.map(b => b.length))/(.1*sims.length));
-  if (prob != max_prob) {
-    max_prob = prob;
-    y.domain([0, max_prob]);
-    axis[1].call(d3.axisLeft(y));
+  let step = Math.ceil(Math.max.apply(Math, bins.map(b => b.length)) / (max_scale * sims.length));
+  console.log("==========================================")
+  console.log("max => (" + max_scale + "," + max_step + ")");
+  console.log("step => "+ step);
+  if ((step == 1) || (step < max_step)) {
+    console.log("prob menor");
+    if (step <=  1) {
+      max_scale /= 10;
+      max_step = 10;
+    } else max_step -= 1;
+    rescale(max_scale, max_step);
+  } else if (step > max_step) {
+    console.log("prob mayor");
+    if (step >  10) {
+      max_scale *= 10;
+      max_step = 1;
+    } else max_step += 1;
+    rescale(max_scale, max_step);
   }
   svg.selectAll("rect")
       .data(bins)
@@ -175,11 +177,13 @@ function resize() {
   y.range([height - margin.bottom, margin.top]);
   axis[1].attr("transform", `translate(${margin.left},0)`);
   axis[1].call(d3.axisLeft(y));
-  h_lines.forEach((l,i) => {
-    let h = y(max_prob*(i+1)/10);
-    l.attr("x1", margin.left).attr("x2", width-margin.right)
-    .attr("y1", h).attr("y2", h);
-  });
+  svg.selectAll(".grid")
+      .data(y.ticks())
+      .join(
+          update => update
+                .attr("visibility", "visible")
+                .attr("y1", x => y(x))
+                .attr("y2", x => y(x)));
   name_text.attr("x", width-margin.right).attr("y", margin.top);
   iter_text.attr("x", width-margin.right).attr("y", 2*margin.top);
   if (stats) {
@@ -192,6 +196,31 @@ function resize() {
       });
   }
   repaint();
+}
+
+function rescale(scale, step) {
+  y.domain([0, scale * step]);
+  axis[1].call(d3.axisLeft(y));
+  console.log("ticks => " + y.ticks());
+  svg.selectAll(".grid")
+      .data(y.ticks())
+      .join(
+          enter => enter
+              .append("line")
+                .attr("class", "grid")
+                .attr("stroke", "black")
+                .attr("stroke-dasharray", "2 5")
+                .attr("visibility", "visible")
+                .attr("x1", margin.left)
+                .attr("x2", width-margin.right)
+                .attr("y1", x => y(x))
+                .attr("y2", x => y(x)),
+          update => update
+                .attr("visibility", "visible")
+                .attr("y1", x => y(x))
+                .attr("y2", x => y(x)),
+          exit => exit
+              .attr("visibility", "hidden"));
 }
 
 function mousemove(e) {

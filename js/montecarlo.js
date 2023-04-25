@@ -30,7 +30,7 @@ async function montecarlo_start() {
       confs_in
         .filter(c => (c[3] == "discrete") || (c[3] == "custom"))
         .forEach((c,i) => {
-          c[6] = c[5].map(p => p.prob).map(cumulativeSum(0));
+          c[6] = c[5].map(x => x.p).map(cumulativeSum(0));
         });
       confs_out.forEach((c,i) => {
         montecarlo_win[i] = window.open("montecarlo.html?id=" + i + "&name=" + c[0] + "&nbins=" + nbins, "forecast_"+i);
@@ -75,7 +75,7 @@ function montecarlo_in(confs, context) {
       case "triangular":
         input = sampleTriangular(conf[5].min, conf[5].max, conf[5].mode);
         break;
-      case "binomial":
+      case "yes/no":
         input = sampleBinomial(conf[5].yes);
         break;
       case "discrete":

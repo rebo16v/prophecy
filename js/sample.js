@@ -29,12 +29,12 @@ function sampleBinomial(prob) {
 function sampleDiscrete(conf, cums) {
   const u = Math.random();
   let idx = cums.findIndex(c => c>=u);
-  return conf[idx].val;
+  return conf[idx].v;
 }
 
 function sampleCustom(conf, cums) {
   const u = Math.random();
   let idx = cums.findIndex(c => c>=u);
   const u2 = Math.random();
-  return conf[idx].min + (u2 * (conf[idx].max-conf[idx].min));
+  return conf[idx].l + (u2 * (conf[idx].h-conf[idx].l));
 }

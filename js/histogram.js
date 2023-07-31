@@ -133,7 +133,7 @@ function message(e) {
 	max_text = svg.append("text")
 		.text("max = " + Math.max(...sims).toFixed(2))
 		.attr("font-family", "Arial").attr("font-size", "smaller").attr("fill", "blue")
-		.attr("text-anchor", "end").attr("x", width-margin.right).attr("y", 4*margin.top+1000);
+		.attr("text-anchor", "end").attr("x", width-margin.right).attr("y", 4*margin.top+100);
 		
 		
     m_text = svg.append("text")
@@ -162,18 +162,18 @@ function repaint() {
       (sims);  
   if (!stats) {
 	  let step = Math.ceil(Math.max.apply(Math, bins.map(b => b.length)) / (max_scale * sims.length));  
-	  console.log("==========================================")
-	  console.log("max => (" + max_scale + "," + max_step + ")");
-	  console.log("step => "+ step);
+	  //console.log("==========================================")
+	  //console.log("max => (" + max_scale + "," + max_step + ")");
+	  //console.log("step => "+ step);
 	  if ((step == 1) || (step < max_step)) {
-		console.log("prob menor");
+		//console.log("prob menor");
 		if (step <=  1) {
 		  max_scale /= 10;
 		  max_step = 10;
 		} else max_step -= 1;
 		rescale(max_scale, max_step);
 	  } else if (step > max_step) {
-		console.log("prob mayor");
+		//console.log("prob mayor");
 		if (step >  10) {
 		  max_scale *= 10;
 		  max_step = 1;
@@ -212,7 +212,7 @@ function repaint() {
 }
 
 function resize() {
-  console.log("RESIZE => " + mdown + " -> " + mup);
+  //console.log("RESIZE => " + mdown + " -> " + mup);
   width = window.innerWidth - margin.left;
   height = window.innerHeight - margin.top;
   svg.attr("width", width).attr("height", height);
@@ -260,7 +260,7 @@ function resize() {
 function rescale(scale, step) {
   y.domain([0, scale * step]);
   axis[1].call(d3.axisLeft(y));
-  console.log("ticks => " + y.ticks());
+  //console.log("ticks => " + y.ticks());
   svg.selectAll(".grid")
       .data(y.ticks())
       .join(
@@ -302,7 +302,7 @@ function mousemove(e) {
 		if (idx1>=0 && idx2>=0) {q = Math.round(100 * (Math.abs(idx1-idx2) / sims.length));}
 		else if (idx1>=0) {q = Math.round(100 * (Math.abs(idx1-sims.length) / sims.length));}
 		else {q = 0;}
-		console.log("mousemove => " + mdown + "->" + value);	
+		//console.log("mousemove => " + mdown + "->" + value);	
 		const begin = x(mdown);
 		inter_line.attr("x", Math.min(begin, coord)).attr("width", Math.abs(coord-begin));		
 		inter_text.text("Qinterval=" + q + "%").attr("x", Math.max(begin,coord));	
@@ -317,7 +317,7 @@ function mousemove(e) {
 
 function mousedown(e) {
   const coord = e.x;
-  console.log("mousedown => " + coord);
+  //console.log("mousedown => " + coord);
   if ((coord>margin.left) && (coord<(width-margin.right))) {
 	mup = -1;
     mdown = x.invert(coord);	
@@ -326,7 +326,7 @@ function mousedown(e) {
 
 function mouseup(e) {
   const coord = e.x;
-  console.log("mouseup => " + coord);
+  //console.log("mouseup => " + coord);
   if ((coord>margin.left) && (coord<(width-margin.right))) 
     mup = x.invert(coord);
   else
